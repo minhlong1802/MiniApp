@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import IntroSlider from './IntroSlider';
 function DetailsTabScreen({ navigation }) {
   return (
     <ImageBackground source={require('./ImageBackground.png')} style={styles.backgroundImage}>
@@ -173,10 +173,25 @@ function AppNavigator() {
 
 function App() {
   const [signedIn, setSignedIn] = useState(false);
+  const [showSlider, setShowSlider] = useState(true);
+
+  useEffect(() => {
+    if (signedIn) {
+      setShowSlider(true);
+    }
+  }, [signedIn]);
 
   return (
     <NavigationContainer>
-      {signedIn ? <AppNavigator /> : <SignInNavigator setSignedIn={setSignedIn} />}
+      {signedIn ? (
+        showSlider ? (
+          <IntroSlider onDone={() => setShowSlider(false)} />
+        ) : (
+          <AppNavigator />
+        )
+      ) : (
+        <SignInNavigator setSignedIn={setSignedIn} />
+      )}
     </NavigationContainer>
   );
 }
